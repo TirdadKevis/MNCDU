@@ -55,27 +55,7 @@ def save_to_csv(data, filename):
         for station_fields in data:
             writer.writerow(station_fields.values())
 
-total_duration = int(input("Enter the total duration in minutes: "))
-interval_duration = int(input("Enter the interval in minutes: "))
-
-num_requests = total_duration // interval_duration + 1
-
-for i in range(num_requests):
-    current_time = datetime.now()
-    duration_seconds = interval_duration * 60
-    
-    filename = f"{current_time.strftime('%d_%m_%y_%H_%M')}.csv"
-    
-    citi_bike_nyc_data = get_newyork_data()
-
-    if citi_bike_nyc_data:
-        print(citi_bike_nyc_data)
-        save_to_csv(citi_bike_nyc_data, filename)
-    else:
-        print("No data retrieved for Citi Bike in New York.")
-
-    if i < num_requests - 1:
-        # Sleep for the specified interval before the next iteration
-        time.sleep(duration_seconds)
-    else:
-        print("The code has been well executed")
+current_time = datetime.now()
+filename = f"{current_time.strftime('%d_%m_%y_%H_%M')}.csv"
+citi_bike_nyc_data = get_newyork_data()
+save_to_csv(citi_bike_nyc_data, filename)
