@@ -57,7 +57,7 @@ def save_to_csv(data, filename):
             writer.writerow(station_fields.values())
 
 current_time = datetime.now()
-directory_path = "/home/code/"
+directory_path = "/home/result/"
 filename = os.path.join(directory_path, f"{current_time.strftime('%d_%m_%y_%H_%M')}.csv")
 citi_bike_nyc_data = get_newyork_data()
 save_to_csv(citi_bike_nyc_data, filename)
