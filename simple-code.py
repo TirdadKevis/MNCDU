@@ -3,6 +3,7 @@ import requests
 import csv
 from datetime import datetime, timedelta
 import time
+from azure.storage.blob import BlobServiceClient
 
 def get_newyork_data():
     # Known URL for the Citi Bike network in New York
@@ -60,4 +61,23 @@ current_time = datetime.now()
 directory_path = "/home/result/"
 filename = os.path.join(directory_path, f"{current_time.strftime('%d_%m_%y_%H_%M')}.csv")
 citi_bike_nyc_data = get_newyork_data()
-save_to_csv(citi_bike_nyc_data, filename)
+
+# Azure Storage configuration
+storage_account_connection_string = "DefaultEndpointsProtocol=https;AccountName=analysisstotage;AccountKey=2ZBsdJIGMjN0Zo9eqQ7/zZOcE1v9k5Qe/325kSK4hSyiEulRzJs/6iSdJg+u9kCicnnirRqYC7bI+ASt0oObgw==;EndpointSuffix=core.windows.net"
+container_name = "analysis"
+blob_name = f"citi_bike_data_{current_time.strftime('%Y%m%d%H%M%S')}.csv"
+
+def save_to_csv_2(data, container_name, blob_name, connection_string):
+    # Connect to Azure Storage
+    blob_service_client = BlobServiceClient.from_connection_string(connection_string)
+    container_client = blob_service_client.get_container_client(container_name)
+    blob_client = container_client.get_blob_client(blob_name)
+
+    # Convert data to CSV format
+    csv_data = "\n".join([",".join(map(str, record.values())) for record in data])
+
+    # Upload data to the blob
+    blob_client.upload_blob(csv_data, overwrite=True)
+
+# Save data to Azure Storage
+save_to_csv_2(citi_bike_nyc_data, container_name, blob_name, storage_account_connection_string)
