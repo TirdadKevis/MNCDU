@@ -3,7 +3,7 @@ import requests
 import csv
 from datetime import datetime, timedelta
 import time
-from azure.storage.blob import BlobService
+from azure.storage.blob import BlobServiceClient
 
 def get_newyork_data():
     # Known URL for the Citi Bike network in New York
